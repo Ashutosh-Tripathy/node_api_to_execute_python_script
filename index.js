@@ -5,11 +5,11 @@ var handlePostRequest = (req, res) =>{
 	
 };
 
-var server = http.createServer((req, res)=>{
+var server =http.createServer(function (req, res) {
 	if(req.method == "POST"){
 		handlePostRequest(req, res);
 	} else {
-		res.send("This action is not available.")
+		res.end("This action is not available.");
 	}
 });
 
