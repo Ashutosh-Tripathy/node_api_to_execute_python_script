@@ -1,0 +1,12 @@
+{
+  "name": "node_api_to_execute_python_script",
+  "version": "1.0.0",
+  "description": "Node api to execute python script and return result",
+  "main": "index.js",
+  "author": "Ashutosh Tripathy",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "python-shell": "^0.4.0"
+  }
+}
