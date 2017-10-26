@@ -1,2 +1,4 @@
-# name = input()
-print("Message from python script: Hi " + "Ashu")
+import time
+name = input()
+time.sleep(5)
+print("Message from python script: Hi " + name)

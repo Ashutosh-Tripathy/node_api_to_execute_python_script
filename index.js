@@ -8,7 +8,7 @@ var getPythonMessage = (req, res) => {
     return new Promise((resolve, reject) => {
         var queryData = url.parse(req.url, true).query;
         executeScript(queryData.name)
-            .then(resolve)
+            .then((message) => resolve(message))
             .catch(reject);
     });
 };
@@ -21,9 +21,9 @@ var executeScript = (name) => {
         var shell = new PythonShell('my_script.py', { mode: 'text', scriptPath: 'script/' });
         shell.on('message', function (message) {
             console.log(message);
+            resolve(message);
         });
         shell.send(name);
-        resolve();
     })
 
     //   shell.end(function (err) {
@@ -35,13 +35,14 @@ var executeScript = (name) => {
 var server = http.createServer(function (req, res) {
     if (req.method == "GET" && req.url.indexOf('/getpythonmessage') == 0) {
         getPythonMessage(req, res)
-            .then(() => {
+            .then((message) => {
                 res.statusCode = 200;
-                res.end("Successful");
+                res.end(message);
             })
-            .catch(() => {
+            .catch((e) => {
                 res.statusCode = 422;
-                res.end("Invalid query parameter");
+                res.end(e);
+                // res.end("Invalid query parameter");
             });
     } else {
         res.statusCode = 405;
