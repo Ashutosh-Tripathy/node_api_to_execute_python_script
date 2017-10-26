@@ -20,16 +20,14 @@ var executeScript = (name) => {
         }
         var shell = new PythonShell('my_script.py', { mode: 'text', scriptPath: 'script/' });
         shell.on('message', function (message) {
-            console.log(message);
             resolve(message);
         });
-        shell.send(name);
+        shell.send(JSON.stringify({ name: name }));
     })
-
-    //   shell.end(function (err) {
-    //     if (err) throw err;
-    //     console.log('finished');
-    // });
+    shell.end(function (err) {
+        if (err) throw err;
+        // console.log('finished');
+    });
 };
 
 var server = http.createServer(function (req, res) {
@@ -37,6 +35,7 @@ var server = http.createServer(function (req, res) {
         getPythonMessage(req, res)
             .then((message) => {
                 res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
                 res.end(message);
             })
             .catch((e) => {

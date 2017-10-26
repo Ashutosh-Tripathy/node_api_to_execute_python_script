@@ -1,4 +1,6 @@
 import time
-name = input()
-time.sleep(5)
-print("Message from python script: Hi " + name)
+import json
+data = json.loads((input()))
+time.sleep(1)
+result = {"message": "from python: Hi " + data.get("name", "")}
+print(json.dumps(result))
