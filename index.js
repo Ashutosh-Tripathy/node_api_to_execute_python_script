@@ -4,42 +4,50 @@ var port = 8000;
 var querystring = require('querystring');
 var url = require('url');
 
-var handleGetData = (req, res) => {
-    var queryData = url.parse(req.url, true).query;
-    if(queryData.name){
-        executeScript(queryData.name,()=>{
-            res.statusCode = 200;
-            res.end("Successful");
-        });
-    } else {
-        res.statusCode = 422;
-        res.end("Invalid query parameter");
-    }
+var getPythonMessage = (req, res) => {
+    return new Promise((resolve, reject) => {
+        var queryData = url.parse(req.url, true).query;
+        executeScript(queryData.name)
+            .then(resolve)
+            .catch(reject);
+    });
 };
 
-var server = http.createServer(function(req, res) {
+var executeScript = (name) => {
+    return new Promise((resolve, reject) => {
+        if (!name) {
+            reject("Invalid query parameter");
+        }
+        var shell = new PythonShell('my_script.py', { mode: 'text', scriptPath: 'script/' });
+        shell.on('message', function (message) {
+            console.log(message);
+        });
+        shell.send(name);
+        resolve();
+    })
+
+    //   shell.end(function (err) {
+    //     if (err) throw err;
+    //     console.log('finished');
+    // });
+};
+
+var server = http.createServer(function (req, res) {
     if (req.method == "GET" && req.url.indexOf('/getpythonmessage') == 0) {
-        handleGetData(req,res);
+        getPythonMessage(req, res)
+            .then(() => {
+                res.statusCode = 200;
+                res.end("Successful");
+            })
+            .catch(() => {
+                res.statusCode = 422;
+                res.end("Invalid query parameter");
+            });
     } else {
         res.statusCode = 405;
         res.end("This action is not available.");
     }
 });
-
-
-
-var executeScript = (name, cb) =>{
-    var shell = new PythonShell('my_script.py', { mode: 'text',scriptPath:'script/'});
-    shell.on('message', function (message) {
-        console.log(message);
-      });
-      shell.send(name);
-      cb();
-    //   shell.end(function (err) {
-    //     if (err) throw err;
-    //     console.log('finished');
-    // });
-}; 
 
 server.listen(port);
 console.log("server is listing on port: " + port);
