@@ -15,12 +15,12 @@ var winston = new (winston.Logger)({
         new winston.transports.File({
             filename: 'log/app.log', json: false, level: logLevel,
             timestamp: function () {
-                return moment.utc().format("YYYY-MM-DD HH:mm:ss.SSS");
+                return moment().utcOffset("+05:30").format("YYYY-MM-DD HH:mm:ss.SSS");
             }, colorize: true
         }),
         new (winston.transports.Console)({
             json: false, timestamp: function () {
-                return moment.utc().format("YYYY-MM-DD HH:mm:ss.SSS");
+                return moment().utcOffset("+05:30").format("YYYY-MM-DD HH:mm:ss.SSS");
             }, level: logLevel, colorize: true
         })
     ],
@@ -28,12 +28,12 @@ var winston = new (winston.Logger)({
         new winston.transports.File({
             filename: 'log/exception.log', json: false, level: logLevel,
             timestamp: function () {
-                return moment.utc().format("YYYY-MM-DD HH:mm:ss.SSS");
+                return moment().utcOffset("+05:30").format("YYYY-MM-DD HH:mm:ss.SSS");
             }, colorize: true
         }),
         new (winston.transports.Console)({
             json: false, timestamp: function () {
-                return moment.utc().format("YYYY-MM-DD HH:mm:ss.SSS");
+                return moment().utcOffset("+05:30").format("YYYY-MM-DD HH:mm:ss.SSS");
             }, level: logLevel, colorize: true
         })
     ],
