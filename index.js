@@ -30,7 +30,7 @@ var executeScript = (name) => {
             return resolve(message);
         });
         var input = JSON.stringify({ name: name });
-        log(2, "Run scrint with parameter :" + input);
+        log(2, "Run scrint with parameter: " + input);
         shell.send(input);
     })
     // shell.end(function (err) {
